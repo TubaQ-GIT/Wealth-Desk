@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demo Wealth Desk – Practice Site</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f7fa;--card:#fff;--tx:#14213d;--mu:#5b6678;--bd:#d9dfe8;--ac:#1d4ed8;--ok:#0f7b45;--er:#b42318;--wa:#9a6700}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--card:#18223a;--tx:#e8edf7;--mu:#9aa6bd;--bd:#2b3957;--ac:#6ea0ff;--ok:#4ade80;--er:#f87171;--wa:#fbbf24}}
+:root[data-theme="dark"]{--bg:#0f1624;--card:#18223a;--tx:#e8edf7;--mu:#9aa6bd;--bd:#2b3957;--ac:#6ea0ff;--ok:#4ade80;--er:#f87171;--wa:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--bd);background:var(--card)}
+header b{font-size:18px}header span{color:var(--mu);font-size:13px}
+nav{display:flex;gap:6px;padding:12px 20px 0;flex-wrap:wrap}
+nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:8px 8px 0 0;cursor:pointer;font:inherit}
+nav button[aria-selected="true"]{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{padding:16px 20px;max-width:980px;margin:auto}
+section{display:none;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px}section.on{display:block}
+h2{margin:0 0 12px;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--mu);margin-bottom:3px}
+input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font:inherit}
+button.p{margin-top:14px;padding:10px 18px;border:0;border-radius:6px;background:var(--ac);color:#fff;cursor:pointer;font:inherit}
+button.s{margin-left:8px;padding:10px 14px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx);cursor:pointer;font:inherit}
+.msg{margin-top:12px;padding:10px 12px;border-radius:6px;border:1px solid var(--bd);display:none}
+.msg.ok{display:block;color:var(--ok);border-color:var(--ok)}.msg.er{display:block;color:var(--er);border-color:var(--er)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600}
+.pill{padding:2px 8px;border-radius:99px;font-size:12px;border:1px solid var(--wa);color:var(--wa)}.pill.executed{color:var(--ok);border-color:var(--ok)}.pill.rejected{color:var(--er);border-color:var(--er)}
+pre{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:10px;font-size:12px;overflow-x:auto;margin:8px 0 0;max-height:160px}
+.hint{color:var(--mu);font-size:13px;margin-top:14px}.kv{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px}.kv div{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 14px}.kv small{display:block;color:var(--mu)}
+</style></head><body>
+<header><div><b>Demo Wealth Desk</b> <span>· adviser portal</span></div><span>Practice site for test automation. Not a real firm; no real data.</span></header>
+<nav role="tablist">
+<button data-tab="onboard" aria-selected="true" id="tab-onboard">Onboard client</button>
+<button data-tab="portfolio" aria-selected="false" id="tab-portfolio">Portfolio</button>
+<button data-tab="order" aria-selected="false" id="tab-order">Place order</button>
+<button data-tab="orders" aria-selected="false" id="tab-orders">Order blotter</button>
+<button data-tab="corp" aria-selected="false" id="tab-corp">Corporate actions</button>
+<button data-tab="portal" aria-selected="false" id="tab-portal">Client portal</button>
+</nav>
+<main>
+<section id="onboard" class="on"><h2>Onboard client</h2>
+<div class="grid">
+<div><label for="cname">Client name</label><input id="cname" data-testid="client-name"></div>
+<div><label for="cemail">Email</label><input id="cemail" data-testid="client-email"></div>
+<div><label for="cid">National ID (6–12 letters/digits)</label><input id="cid" data-testid="client-id"></div>
+<div><label for="crisk">Risk profile</label><select id="crisk" data-testid="client-risk"><option value="">Select</option><option>Conservative</option><option>Moderate</option><option>Aggressive</option></select></div>
+<div><label for="cdep">Initial deposit (£)</label><input id="cdep" type="number" data-testid="client-deposit"></div>
+<div><label for="cterms">KYC consent</label><select id="cterms" data-testid="client-kyc"><option value="">Select</option><option value="yes">I confirm KYC checks are complete</option><option value="no">Not yet</option></select></div>
+</div>
+<button class="p" id="btn-create" data-testid="create-client">Create client</button><button class="s" id="btn-clear">Clear</button>
+<div class="msg" id="m1" role="status"></div>
+<p class="hint">Test ideas: empty fields, bad email, deposit below 1,000, duplicate email, KYC = Not yet.</p></section>
+
+<section id="portfolio"><h2>Portfolio</h2>
+<label for="pclient">Client</label><select id="pclient" data-testid="portfolio-client"></select>
+<div class="kv" style="margin-top:12px"><div><small>Cash</small><span id="pcash">£0.00</span></div><div><small>Holdings value</small><span id="phold">£0.00</span></div><div><small>Total</small><span id="ptot">£0.00</span></div></div>
+<div class="tw"><table id="ptab"><thead><tr><th>Fund</th><th>Ccy</th><th>Units</th><th>Price (native)</th><th>Value (GBP)</th></tr></thead><tbody></tbody></table></div></section>
+
+<section id="order"><h2>Place order</h2>
+<div class="grid">
+<div><label for="oclient">Client</label><select id="oclient" data-testid="order-client"></select></div>
+<div><label for="ofund">Fund</label><select id="ofund" data-testid="order-fund"></select></div>
+<div><label for="oside">Side</label><select id="oside" data-testid="order-side"><option>Buy</option><option>Sell</option></select></div>
+<div><label for="oqty">Units</label><input id="oqty" type="number" data-testid="order-qty"></div>
+</div>
+<p class="hint" id="oest">Estimated value: £0.00</p>
+<button class="p" id="btn-order" data-testid="submit-order">Submit order</button>
+<div class="msg" id="m2" role="status"></div>
+<p class="hint">Rules: Conservative clients may only buy Low-risk funds; Moderate can buy Low and Medium; Aggressive can buy all. Buys need enough cash; sells need enough units. Fund prices are in their own currency and valued in GBP.</p></section>
+
+<section id="orders"><h2>Order blotter</h2>
+<div class="tw"><table id="otab"><thead><tr><th>Ref</th><th>Client</th><th>Fund</th><th>Side</th><th>Units</th><th>Value</th><th>Status</th></tr></thead><tbody></tbody></table></div></section>
+
+<section id="corp"><h2>Corporate actions</h2><div class="grid"><div><label for="afund">Fund</label><select id="afund" data-testid="ca-fund"></select></div><div><label for="atype">Action</label><select id="atype" data-testid="ca-type"><option value="split">Unit split (ratio)</option><option value="div">Cash dividend (per unit, fund currency)</option></select></div><div><label for="aval">Value (split ratio or dividend amount)</label><input id="aval" type="number" step="0.01" data-testid="ca-value"></div></div><button class="p" id="btn-ca" data-testid="apply-ca">Apply to all holders</button><div class="msg" id="m3" role="status"></div><p class="hint">A split multiplies units and divides the price. A dividend credits GBP cash at the current FX rate. Test ideas: ratio of 1 or a decimal, zero or negative dividend, a fund nobody holds. Then check the portfolio.</p></section>
+<section id="portal"><h2>Client portal (read-only)</h2><div id="pin"><div class="grid"><div><label for="lemail">Client email</label><input id="lemail" data-testid="portal-email"></div><div><label for="lpass">Access code</label><input id="lpass" type="password" data-testid="portal-code"></div></div><button class="p" id="btn-login" data-testid="portal-login">Sign in</button></div><div id="pview" style="display:none"><p id="pwho"></p><div class="tw"><table id="qtab"><thead><tr><th>Fund</th><th>Units</th><th>Value (GBP)</th></tr></thead><tbody></tbody></table></div><button class="s" style="margin:12px 0 0" id="btn-logout">Sign out</button></div><div class="msg" id="m4" role="status"></div><p class="hint">The access code for every client is portal123. Test ideas: wrong code, unknown email, empty fields, then compare the portal with the adviser portfolio.</p></section>
+<section class="on" style="margin-top:16px;display:block"><h2>Activity log</h2><p class="hint" style="margin:0">Simulated API calls, newest first.</p><pre id="log">No activity yet.</pre></section>
+</main>
+<script>
+const FX={GBP:1,USD:0.80,EUR:0.85};const FUNDS=[{c:"GILT01",n:"UK Gilt Fund",r:"Low",cur:"GBP",np:102.40},{c:"BAL02",n:"Balanced Growth Fund",r:"Medium",cur:"GBP",np:58.75},{c:"EQT03",n:"Global Equity Fund",r:"High",cur:"USD",np:267.50},{c:"EMK04",n:"Emerging Markets Fund",r:"High",cur:"EUR",np:42.60}].map(f=>({...f,p:+(f.np*FX[f.cur]).toFixed(2)}));
+const ALLOW={Conservative:["Low"],Moderate:["Low","Medium"],Aggressive:["Low","Medium","High"]};
+const clients=[],orders=[],logs=[];let seq=1000;
+const $=id=>document.getElementById(id),gbp=n=>"£"+n.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
+function msg(id,t,ok){const e=$(id);e.className="msg "+(ok?"ok":"er");e.textContent=t}
+function log(l){logs.unshift(new Date().toLocaleTimeString()+"  "+l);$("log").textContent=logs.slice(0,12).join("\n")}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));["onboard","portfolio","order","orders","corp","portal"].forEach(s=>$(s).classList.toggle("on",s===b.dataset.tab));refresh()});
+$("ofund").innerHTML=$("afund").innerHTML=FUNDS.map(f=>`<option value="${f.c}">${f.n} (${f.r} risk, ${f.cur})</option>`).join("");
+function opts(){const o=clients.length?clients.map(c=>`<option value="${c.id}">${c.name} (${c.risk})</option>`).join(""):'<option value="">No clients yet</option>';["pclient","oclient"].forEach(i=>{const v=$(i).value;$(i).innerHTML=o;if(v)$(i).value=v})}
+function renderP(){const c=clients.find(x=>x.id==$("pclient").value);const tb=$("ptab").tBody;tb.innerHTML="";if(!c){$("pcash").textContent=$("phold").textContent=$("ptot").textContent=gbp(0);return}
+let h=0;FUNDS.forEach(f=>{const u=c.hold[f.c]||0;if(u){h+=u*f.p;tb.innerHTML+=`<tr><td>${f.n}</td><td>${f.cur}</td><td>${u}</td><td>${f.np.toLocaleString()} ${f.cur}</td><td>${gbp(u*f.p)}</td></tr>`}});
+if(!tb.innerHTML)tb.innerHTML='<tr><td colspan="5">No holdings</td></tr>';$("pcash").textContent=gbp(c.cash);$("phold").textContent=gbp(h);$("ptot").textContent=gbp(c.cash+h)}
+function renderO(){$("otab").tBodies[0].innerHTML=orders.length?orders.map(o=>`<tr><td>${o.ref}</td><td>${o.client}</td><td>${o.fund}</td><td>${o.side}</td><td>${o.qty}</td><td>${gbp(o.val)}</td><td><span class="pill ${o.status.toLowerCase()}">${o.status}</span></td></tr>`).join(""):'<tr><td colspan="7">No orders</td></tr>'}
+function est(){const f=FUNDS.find(x=>x.c==$("ofund").value),q=+$("oqty").value||0;$("oest").textContent="Estimated value: "+gbp(q*f.p)}
+function refresh(){opts();renderP();renderO();est()}
+$("pclient").onchange=renderP;$("ofund").onchange=est;$("oqty").oninput=est;
+$("btn-clear").onclick=()=>{["cname","cemail","cid","crisk","cdep","cterms"].forEach(i=>$(i).value="");$("m1").className="msg"};
+$("btn-create").onclick=()=>{const n=$("cname").value.trim(),e=$("cemail").value.trim().toLowerCase(),id=$("cid").value.trim(),r=$("crisk").value,d=parseFloat($("cdep").value),k=$("cterms").value;
+let er=null;if(!n)er="Client name is required.";else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))er="Enter a valid email address.";else if(!/^[A-Za-z0-9]{6,12}$/.test(id))er="National ID must be 6–12 letters or digits.";else if(!r)er="Select a risk profile.";else if(!(d>=1000))er="Minimum initial deposit is £1,000.";else if(k!=="yes")er="KYC consent must be confirmed.";else if(clients.some(c=>c.email===e))er="A client with this email already exists.";
+if(er){log("POST /clients 400 "+er);return msg("m1",er,false)}
+const c={id:"C"+(++seq),name:n,email:e,risk:r,cash:d,hold:{}};clients.push(c);log("POST /clients 201 "+c.id);msg("m1",`Client created: ${c.id} (${n}). Cash ${gbp(d)}.`,true);refresh();$("btn-clear").click();$("m1").className="msg ok";$("m1").textContent=`Client created: ${c.id} (${n}). Cash ${gbp(d)}.`}
+$("btn-order").onclick=()=>{const c=clients.find(x=>x.id==$("oclient").value),f=FUNDS.find(x=>x.c==$("ofund").value),s=$("oside").value,q=+$("oqty").value;
+let er=null;if(!c)er="Create a client first.";else if(!Number.isInteger(q)||q<=0)er="Units must be a whole number above zero.";
+else if(s=="Buy"&&!ALLOW[c.risk].includes(f.r))er=`Suitability check failed: ${c.risk} clients cannot buy ${f.r}-risk funds.`;
+else if(s=="Buy"&&q*f.p>c.cash)er=`Insufficient cash: need ${gbp(q*f.p)}, available ${gbp(c.cash)}.`;
+else if(s=="Sell"&&(c.hold[f.c]||0)<q)er=`Insufficient units: holding ${c.hold[f.c]||0}.`;
+const o={ref:"ORD"+(++seq),client:c?c.name:"-",fund:f.c,side:s,qty:q||0,val:(q||0)*f.p,status:er?"Rejected":"Executed"};orders.unshift(o);
+if(er){log("POST /orders 422 "+er);renderO();return msg("m2",er,false)}
+if(s=="Buy"){c.cash-=o.val;c.hold[f.c]=(c.hold[f.c]||0)+q}else{c.hold[f.c]-=q;c.cash+=o.val}
+log("POST /orders 201 "+o.ref+" Executed");msg("m2",`Order ${o.ref} executed.`,true);renderO();renderP()
+}
+refresh();
+$("btn-ca").onclick=()=>{const f=FUNDS.find(x=>x.c==$("afund").value),t=$("atype").value,v=+$("aval").value,hs=clients.filter(c=>c.hold[f.c]>0);let er=null;if(!(v>0))er="Value must be above zero.";else if(t=="split"&&(!Number.isInteger(v)||v<2))er="Split ratio must be a whole number of at least 2.";else if(!hs.length)er="No clients hold "+f.c+".";
+if(er){log("POST /corporate-actions 422 "+er);return msg("m3",er,false)}
+if(t=="split"){hs.forEach(c=>c.hold[f.c]*=v);f.np=+(f.np/v).toFixed(2);f.p=+(f.np*FX[f.cur]).toFixed(2)}else hs.forEach(c=>c.cash+=c.hold[f.c]*v*FX[f.cur]);
+log("POST /corporate-actions 201 "+f.c+" "+t+" "+v);msg("m3",`Applied to ${hs.length} client(s).`,true);refresh()};
+$("btn-login").onclick=()=>{const e=$("lemail").value.trim().toLowerCase(),k=$("lpass").value,c=clients.find(x=>x.email===e);let er=null;if(!e||!k)er="Email and access code are required.";else if(!c||k!=="portal123")er="Invalid email or access code.";
+if(er){log("POST /portal/login 401 "+er);return msg("m4",er,false)}
+log("POST /portal/login 200 "+c.id);$("m4").className="msg";$("pin").style.display="none";$("pview").style.display="block";let h=0,rows="";FUNDS.forEach(f=>{const u=c.hold[f.c]||0;if(u){h+=u*f.p;rows+=`<tr><td>${f.n}</td><td>${u}</td><td>${gbp(u*f.p)}</td></tr>`}});
+$("pwho").textContent=`Welcome, ${c.name}. Cash ${gbp(c.cash)} · Holdings ${gbp(h)} · Total ${gbp(c.cash+h)}`;$("qtab").tBodies[0].innerHTML=rows||'<tr><td colspan="3">No holdings</td></tr>'};
+$("btn-logout").onclick=()=>{$("pview").style.display="none";$("pin").style.display="block";$("lpass").value=""};
+</script></body></html>
